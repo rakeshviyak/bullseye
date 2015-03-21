@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
+    <script type='text/JavaScript' src='http://maps.google.com/maps/api/js?sensor=false&.js'></script> 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+    <link rel="stylesheet" href="buy.css">
+
+
+    <style type="text/css">
+      #map_canvas{
+          width: 900px;
+          height: 500px;  
+          }
+    </style>
+
+
+
+    <script language="JavaScript" type="text/JavaScript">
+       
+        var map;
+        var global_markers = [];    
+        var markers = [[1.32869, 103.74224, 'trialhead0'], [1.45004, 103.81870, 'trialhead1'], [1.33074, 103.90478, 'trialhead2']];
+
+        var infowindow = new google.maps.InfoWindow({});
+
+        function initialize() {
+          geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(1.38470, 103.81254);
+        var myOptions = {
+        zoom: 11,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+          }
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        addMarker();
+        }
+
+        function addMarker() {
+            for (var i = 0; i < markers.length; i++) {
+                // obtain the attribues of each marker
+                var lat = parseFloat(markers[i][0]);
+                var lng = parseFloat(markers[i][1]);
+                var trailhead_name = markers[i][2];
+
+                var myLatlng = new google.maps.LatLng(lat, lng);
+
+                var contentString = "<html><body><div><p><h2>" + trailhead_name + "</h2></p></div></body></html>";
+
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: "Coordinates: " + lat + " , " + lng + " | Trailhead name: " + trailhead_name
+                });
+
+                marker['infowindow'] = contentString;
+
+                global_markers[i] = marker;
+
+                google.maps.event.addListener(global_markers[i], 'click', function() {
+            infowindow.setContent(this['infowindow']);
+            infowindow.open(map, this);
+                });
+            }
+        }       
+
+        window.onload = initialize;
+
+
+
+
+
+
+
+
+      function BuildFormFields($amount)
+      {
+        var
+          $container = document.getElementById('FormFields'),
+          $item, $field, $i;
+
+        $container.innerHTML = '';
+        for ($i = 0; $i < $amount; $i++) {
+          $item = document.createElement('div');
+          $item.style.margin = '3px';
+
+          $field = document.createElement('span');
+          $field.innerHTML = 'Name of Design';
+          $field.style.marginRight = '10px';
+          $item.appendChild($field);
+
+          $field = document.createElement('input');
+          $field.name = 'Design[' + $i + ']';
+          $field.type = 'text';
+          $item.appendChild($field);
+
+          $container.appendChild($item);
+        }
+      }
+
+
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  </head>
+
+<!-- NAV BAR -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="home.html">MyRealtyMate</a>
+      </div>
+      <div class="container">
+        <ul class="nav navbar-nav pull-left">
+          <li class="active"><a href="buy.html">Buy</a></li>
+          <li><a href="#">Rent</a></li>
+          <li><a href="#">Sell</a></li>
+          <li><a href="trends.html">Trends</a></li>
+        </ul>
+        <ul class="nav navbar-nav pull-right">
+          <li><a href="#">Shortlist</a></li>
+          <li><a href="#">Sign Up</a></li>
+          <li><a href="#">Log In</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+      </div>
+    </nav>
+
+  <body data-spy="scroll" data-target="#myScrollspy">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-2">
+        
+    <form method="post" action="order.php">
+      How Many? <input type="text" onkeyup="BuildFormFields(parseInt(this.value, 10));" />
+      <div id="FormFields" style="margin: 20px 0px;"></div>
+      <input type="submit" />
+    </form>
+
+      </div>
+
+      <div class="col-md-9" class="pull-right">
+          <h3>Recent prices of similar Transactions in the last 6 months: $
+          <div id="map_canvas"></div>
+      </div>
+
+
+
+        </div>
+      </div>
+    </div> 
+
+  </body>
+</html>
